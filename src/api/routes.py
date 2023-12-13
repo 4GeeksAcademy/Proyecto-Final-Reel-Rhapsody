@@ -1,7 +1,7 @@
 """
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
-from flask import Flask, request, jsonify, url_for, Blueprint
+from flask import Flask, request, jsonify, url_for, Blueprint, current_app
 from api.models import db, User
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
@@ -25,19 +25,57 @@ def handle_hello():
     return jsonify(response_body), 200
 
 
+# @api.route("/login", methods=["POST"])
+# def login():
+#     email = request.json.get("email", None)
+#     password = request.json.get("password", None)
+#     user = User.query.filter_by(email = email).first()
+#     if user is None:
+#         return jsonify({"msg":"user not found"}), 404
+#     valid_password = current_app.bcrypt.check_password_hash(user.password, password)
+#     if valid_password is False:
+#         return jsonify ({"msg": "invalidad password"}), 401
+#     access_token = create_access_token(identity=email)
+#     return jsonify(access_token=access_token), 200
+
 # Create a route to authenticate your users and return JWTs. The
 # create_access_token() function is used to actually generate the JWT.
+# @api.route("/login", methods=["POST"])
+# def login():
+#     email = request.json.get("email", None)
+#     password = request.json.get("password", None)
+#     user=User.query.filter_by(email=email).first()
+#     if user is None:
+#         return jsonify({"msg": "user not found"}), 404
+
+#     if email != user.email or password != user.password:
+#         return jsonify({"msg": "Bad username or password"}), 401
+
+
+#     access_token = create_access_token(identity=email)
+#     return jsonify(access_token=access_token), 200
+
 @api.route("/login", methods=["POST"])
 def login():
-    user_name = request.json.get("user_name", None)
+    email = request.json.get("email", None)
     password = request.json.get("password", None)
-    user=User.query.filter_by(user_name=user_name).first()
+    user=User.query.filter_by(email=email).first()
     if user is None:
         return jsonify({"msg": "user not found"}), 404
 
-    if user_name != user.user_name or password != user.password:
+    if email != user.email or password != user.password:
         return jsonify({"msg": "Bad username or password"}), 401
+    
+    serialized_user = user.serialize()
+    return serialized_user, 200
 
+    # access_token = create_access_token(identity=email)
+    # return jsonify(access_token=access_token), 200
 
-    access_token = create_access_token(identity=user_name)
-    return jsonify(access_token=access_token)
+@api.route('/user/<int:user_id>', methods=['GET'])
+def get_one_user(user_id):
+    user = User.query.get(user_id)
+    if user is None:
+        return jsonify({"msg": f"user with id {user_id} not found"}), 404
+    serialized_user = user.serialize()
+    return serialized_user, 200
