@@ -1,19 +1,54 @@
 """
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
-from flask import Flask, request, jsonify, url_for, Blueprint
+from flask import request, jsonify, url_for, Blueprint
 from api.models import db, User
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 import json
-from flask_jwt_extended import create_access_token, get_jwt_identity,jwt_required
-
+from flask_jwt_extended import create_access_token, get_jwt_identity,jwt_required,JWTManager
+from flask_bcrypt import Bcrypt
 
 api = Blueprint('api', __name__)
 bcrypt = Bcrypt()
-
+jwt = JWTManager()
 # Allow CORS requests to this API
 CORS(api)
+@api.route("/login", methods=['POST'])
+def login():
+    try:
+        data = request.get_json()
+
+        if not data or 'email' not in data or 'password' not in data:
+            return jsonify({"error": "Se requieren tanto el correo electrónico como la contraseña."}), 400
+        
+        email = data['email']
+        password = data['password']
+
+        if not email or not password:
+            return jsonify({"error": "Faltó algún dato en el cuerpo de la solicitud."}), 400
+
+        user = User.query.filter_by(email=email).first()
+
+        if not user:
+            return jsonify({"error": "Usuario no encontrado."}), 404
+
+        password_db = user.password
+
+        if password_db != password:
+            return jsonify({"error": "Contraseña incorrecta."}), 401
+
+        access_token = create_access_token(identity=user.id)
+
+        return jsonify({"access_token": access_token, "fullname": user.full_name, "id": user.id}), 200
+
+    except Exception as e:
+        # Imprimir detalles específicos del error en los registros del servidor
+        print(f"Error en la ruta /login: {str(e)}")
+
+        # Devolver un mensaje detallado al cliente
+        return jsonify({"error": f"Ocurrió un error al procesar la solicitud: {str(e)}"}), 500
+
 
 @api.route('/sign_up', methods=['POST'])
 def create_one_user():
@@ -51,54 +86,6 @@ def create_one_user():
 
         # Devolver un mensaje genérico al cliente
         return jsonify({"error": "Ocurrió un error al procesar la solicitud"}), 500
-
-
-# @api.route("/login", methods=["POST"])
-# def login():
-#     email = request.json.get("email", None)
-#     password = request.json.get("password", None)
-#     user = User.query.filter_by(email = email).first()
-#     if user is None:
-#         return jsonify({"msg":"user not found"}), 404
-#     valid_password = current_app.bcrypt.check_password_hash(user.password, password)
-#     if valid_password is False:
-#         return jsonify ({"msg": "invalidad password"}), 401
-#     access_token = create_access_token(identity=email)
-#     return jsonify(access_token=access_token), 200
-
-# Create a route to authenticate your users and return JWTs. The
-# create_access_token() function is used to actually generate the JWT.
-# @api.route("/login", methods=["POST"])
-# def login():
-#     email = request.json.get("email", None)
-#     password = request.json.get("password", None)
-#     user=User.query.filter_by(email=email).first()
-#     if user is None:
-#         return jsonify({"msg": "user not found"}), 404
-
-#     if email != user.email or password != user.password:
-#         return jsonify({"msg": "Bad username or password"}), 401
-
-
-#     access_token = create_access_token(identity=email)
-#     return jsonify(access_token=access_token), 200
-
-@api.route("/login", methods=["POST"])
-def login():
-    email = request.json.get("email", None)
-    password = request.json.get("password", None)
-    user=User.query.filter_by(email=email).first()
-    if user is None:
-        return jsonify({"msg": "user not found"}), 404
-
-    if email != user.email or password != user.password:
-        return jsonify({"msg": "Bad username or password"}), 401
-    
-    serialized_user = user.serialize()
-    return serialized_user, 200
-
-    # access_token = create_access_token(identity=email)
-    # return jsonify(access_token=access_token), 200
 
 @api.route('/user/<int:user_id>', methods=['GET'])
 def get_one_user(user_id):

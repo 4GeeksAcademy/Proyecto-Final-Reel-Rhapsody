@@ -1,11 +1,7 @@
 {
     "_meta": {
         "hash": {
-<<<<<<< HEAD
-            "sha256": "d793e084e97dc81492403789ea817f62055f3b44673e1a723b280d0d86fdad07"
-=======
-            "sha256": "38ed3a8ca55466e0c6525df0c0b7cba29957fed7e24021b2701ca2193b2e9297"
->>>>>>> ec5adc027d784b87191badddbaa3c46e8207d005
+            "sha256": "ebfb5fdf5bb3dfc83b8cb0ec60828c93ed08a2808554e9577846b98e1b287ab5"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -24,11 +20,6 @@
             "hashes": [
                 "sha256:a23974ea301c3ee52705db809c7413cecd165290c6679b9998dd6c74342ca23a",
                 "sha256:ab4b3b94d2e1e5f81e34be8a9b7b7575fc9dd5398fccb0bef351ec9b14872623"
-<<<<<<< HEAD
-            ],
-            "markers": "python_version >= '3.8'",
-            "version": "==1.13.0"
-=======
             ],
             "markers": "python_version >= '3.8'",
             "version": "==1.13.0"
@@ -55,7 +46,6 @@
             ],
             "markers": "python_version >= '3.7'",
             "version": "==4.1.1"
->>>>>>> ec5adc027d784b87191badddbaa3c46e8207d005
         },
         "blinker": {
             "hashes": [
@@ -103,8 +93,6 @@
             ],
             "index": "pypi",
             "version": "==1.6.1"
-<<<<<<< HEAD
-=======
         },
         "flask-bcrypt": {
             "hashes": [
@@ -113,7 +101,6 @@
             ],
             "index": "pypi",
             "version": "==1.0.1"
->>>>>>> ec5adc027d784b87191badddbaa3c46e8207d005
         },
         "flask-cors": {
             "hashes": [
@@ -122,7 +109,6 @@
             ],
             "index": "pypi",
             "version": "==4.0.0"
-<<<<<<< HEAD
         },
         "flask-jwt-extended": {
             "hashes": [
@@ -131,8 +117,6 @@
             ],
             "index": "pypi",
             "version": "==4.6.0"
-=======
->>>>>>> ec5adc027d784b87191badddbaa3c46e8207d005
         },
         "flask-migrate": {
             "hashes": [
@@ -405,7 +389,6 @@
             ],
             "index": "pypi",
             "version": "==2.9.9"
-<<<<<<< HEAD
         },
         "pyjwt": {
             "hashes": [
@@ -414,8 +397,6 @@
             ],
             "markers": "python_version >= '3.7'",
             "version": "==2.8.0"
-=======
->>>>>>> ec5adc027d784b87191badddbaa3c46e8207d005
         },
         "python-dotenv": {
             "hashes": [
