@@ -15,8 +15,8 @@ const Card = () => {
     console.log(store.films)
     return (
         <>
-            {store.films == null && <span className="text-white">Cargando películas...</span>}
-            {store.films == false && <span className="text-white">Ocurrió un error al cargar las películas</span>}
+            {store.films == null && <span className="text-white"> Cargando películas...</span>}
+            {store.films == false && <span className="text-white"> Ocurrió un error al cargar las películas</span>}
             <div className="py-2 overflow-auto">
 				<div className="d-flex flex-row flex-nowrap">
             {store.films && store.films.length > 0 && store.films.map((item => <div key={item.id} className="card mx-1" style={{minWidth: "18rem"}}>

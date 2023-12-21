@@ -60,6 +60,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log("Error loading message from backend", error);
 				}
 			},
+		
+
 			loadFilmsGenres: async () => {
 				try {
 					const options = {
@@ -69,10 +71,20 @@ const getState = ({ getStore, getActions, setStore }) => {
 							Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzNTNlY2YxZThlMDMwYzc1N2E5MGZlZWQ0NTgwNWY2MyIsInN1YiI6IjY1NzhmODUxZTkzZTk1MjE5MTA5OWE3MyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.353ayqR42w_v4GqICi8fG8idllMAa4F_l06HE-RZxGA'
 						}
 					};
-					fetch('https://api.themoviedb.org/3/genre/movie/list?language=en-US&page=1', options)
-						.then(response => response.json())
-						.then(response => setStore({ filmsGenres: response.genres }))
-						.catch(err => setStore({ filmsGenres: false }));
+					// fetch('https://api.themoviedb.org/3/genre/movie/list?language=en-US&page=1', options)
+					// 	.then(response => response.json())
+					// 	.then(response => setStore({ filmsGenres: response.genres }))
+					// 	.catch(err => setStore({ filmsGenres: false }));
+
+					const response = await fetch('https://api.themoviedb.org/3/genre/movie/list?language=en-US&page=1', options)
+					const data = await response.json()
+					const store = getStore()
+					setStore({
+						...store,
+						  filmsGenres: data,
+
+					})
+						
 
 				} catch (error) {
 					console.log("Error loading message from backend", error);

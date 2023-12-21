@@ -126,3 +126,4 @@ def get_one_user(user_id):
         return jsonify({"msg": f"user with id {user_id} not found"}), 404
     serialized_user = user.serialize()
     return serialized_user, 200
+
