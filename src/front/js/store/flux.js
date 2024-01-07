@@ -75,16 +75,29 @@ const getState = ({ getStore, getActions, setStore }) => {
 					// 	.then(response => response.json())
 					// 	.then(response => setStore({ filmsGenres: response.genres }))
 					// 	.catch(err => setStore({ filmsGenres: false }));
+					const url = 'https://api.themoviedb.org/3/genre/tv/list'
+					const requests = [fetch(url, options), fetch(url.replace('tv','movie'), options)]
+					const responses = await Promise.all(requests)
+					const datas = await Promise.all(responses.map(res => res.json()))
+					console.log(datas)
+					const dropdown = document.getElementById('genreDropdown');
 
-					const response = await fetch('https://api.themoviedb.org/3/genre/movie/list?language=en-US&page=1', options)
-					const data = await response.json()
-					const store = getStore()
-					setStore({
-						...store,
-						  filmsGenres: data,
+					// const response = await fetch('https://api.themoviedb.org/3/genre/movie/list?language=en-US&page=1', options)
+					// const data = await response.json()
+					// const store = getStore()
+					// setStore({
+					// 	...store,
+					// 	  filmsGenres: data,
 
-					})
-						
+					// })
+					datas.forEach(data => {
+						data.genres.forEach(genre => {
+							const option = document.createElement('option');
+							option.value = genre.id;
+							option.text = genre.name;
+							dropdown.appendChild(option);
+						});
+					});
 
 				} catch (error) {
 					console.log("Error loading message from backend", error);
